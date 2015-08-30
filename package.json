@@ -38,7 +38,9 @@
     "ember-try": "0.0.6"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "ember-declarative",
+    "declarative"
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.3"
