@@ -2,6 +2,8 @@
 
 Utilities for the creation of declarative components.
 
+[![Build Status](https://travis-ci.org/shaunc/ember-declarative.svg)](https://travis-ci.org/shaunc/ember-declarative)
+
 ## Installation
 
 * `git clone` this repository
