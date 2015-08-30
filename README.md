@@ -58,6 +58,10 @@ using `display:none`. Then the merge list template defines
 an "implementation" section, which renders the overall list, and
 moves the DOM nodes from the declaration to the list.
 
+### TODO
+
+This example should be extended to incorporate update of lists.
+
 ## API
 
 Declarative components are a very flexible design pattern. Currently, these utilities

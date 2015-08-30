@@ -12,7 +12,7 @@ export default Ember.Component.extend({
     for (let i = 0; i < subLists.length; i++) {
       let {list, source} = subLists[i];
       merged = merged.concat(data[list].map(function(item, index){
-        return {list, item, index, source};
+        return {item, index, source};
       }));
     }
     merged.sort(function(a, b) {
