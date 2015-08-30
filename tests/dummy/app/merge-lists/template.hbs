@@ -1,0 +1,9 @@
+{{! merge-lists }}
+
+{{#declaration-block}}{{yield}}{{/declaration-block}}
+
+<ul>
+  {{#each merged as |item|}}
+    {{merge-lists/render-item item=item}}
+  {{/each}}
+</ul>

@@ -1,0 +1,12 @@
+{{! ember-declarative dummy applicationy}}
+
+<h1>Merge Lists</h1>
+
+{{#merge-lists data=data}}
+  {{#merge-item list='vegetable' as |item|}}
+    <li style="color:green">{{item}}</li>
+  {{/merge-item}}
+  {{#merge-item list='animal' as |item|}}
+    <li style="color:red">{{item}}</li>
+  {{/merge-item}}
+{{/merge-lists}}
