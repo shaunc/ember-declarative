@@ -12,10 +12,18 @@ Utilities for the creation of declarative components.
 
 ## Declarative components
 
-A block component in ember wraps user defined content in a layout. A
-declarative component extends this concept, allowing the user to declare
-many different blocks of content, which can then be rearranged or selectively
-displayed by the overall component.
+A declarative component is a component that wraps a block of declarations,
+which are not incorporated directly into the final component, but serve
+as raw material, directing the construction of the final DOM representation.
+
+Declarations can specify options, and contain sub-blocks which control
+how fragments of content are rendered. The overall component serves
+as a compiler, reorganizing the options and DOM fragments from the 
+declarations into a final rendering.
+
+Declarative components allow the customization of different parts of an interface. They 
+can provide complex functionality in a more reusable manner than
+traditional block components.
 
 ## An example
 

@@ -1,0 +1,9 @@
+{{! ember-declarative/implementation-block ~}}
+
+{{#if parentView.hasBlock ~}}
+  {{#if declarationsUpdated ~}}
+    {{yield}}
+  {{/if}}
+{{else}}
+  {{yield}}
+{{/if}}
