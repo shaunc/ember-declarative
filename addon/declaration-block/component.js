@@ -4,7 +4,7 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   isVisible: false,
-
+/*
   didInsertElement() {
     Ember.run.scheduleOnce(
       'afterRender', this.parentView, 'declarationsDidRegister');
@@ -13,5 +13,5 @@ export default Ember.Component.extend({
     Ember.run.scheduleOnce(
       'afterRender', this.parentView, 'declaractionsDidRerender');
   }
-  
+  */
 });

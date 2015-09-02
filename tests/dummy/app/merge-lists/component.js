@@ -1,8 +1,9 @@
 // dummy/merge-lists/component
 
 import Ember from 'ember';
+import DeclarationContainer from 'ember-declarative/declaration-container/mixin';
 
-export default Ember.Component.extend({
+export default Ember.Component.extend(DeclarationContainer, {
   data: null,
   subLists: Ember.computed(function(){ return Ember.A(); }),
 
@@ -12,7 +13,7 @@ export default Ember.Component.extend({
     for (let i = 0; i < subLists.length; i++) {
       let {list, source} = subLists[i];
       merged = merged.concat(data[list].map(function(item, index){
-        return {item, index, source};
+        return {list, item, index, source};
       }));
     }
     merged.sort(function(a, b) {

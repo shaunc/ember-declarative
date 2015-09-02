@@ -15,9 +15,6 @@ export default Ember.Mixin.create({
     let source = this.get('source');
     if(source != null) {
       let target = this.element;
-      console.log(
-        "RENDER; copy", this.get('copyChildren'), 
-        source.innerText.replace(/\s+/g, ' '));
       if (this.get('copyChildren')) {
         copyChildren(source, target, true);
       } else {

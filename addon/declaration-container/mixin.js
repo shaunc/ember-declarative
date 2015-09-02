@@ -21,11 +21,11 @@ export default Ember.Mixin.create({
 
   declarationsDidRegister() {
     this.set('declarationsRegistered', true);
-    this.rerender();
+    //this.rerender();
   },
   declaractionsDidRerender() {
     this.incrementProperty('declarationsUpdated');
-    console.log('updated', this.get('declarationsUpdated'));
+    //console.log('updated', this.get('declarationsUpdated'));
   }
 
 });
