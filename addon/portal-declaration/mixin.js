@@ -89,4 +89,4 @@ export default Ember.Mixin.create(DeclarationBase, {
     let subElements = elt.getElementsByClassName(subClass);
     return subElements;
   }
-})
+});

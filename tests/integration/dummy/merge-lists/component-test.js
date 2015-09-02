@@ -28,8 +28,7 @@ test('it renders', function(assert) {
 
     {{/merge-lists}}    
   `);
-
-  let   actual = this.$().text().trim().split(/\s+/);
+  let   actual = this.$('ul').text().trim().split(/\s+/);
   assert.deepEqual(
     actual, ["apple", "bear", "goat", "lettuce", "pear", "zebra"],
     'lists are merged in sorted order');
