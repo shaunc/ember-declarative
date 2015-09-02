@@ -12,20 +12,22 @@ Utilities for the creation of declarative components.
 
 ## Declarative components
 
-A declarative component is a component that wraps a block of declarations,
-which are not incorporated directly into the final component, but serve
-as raw material, directing the construction of the final DOM representation.
+A declarative component allows the user to declare how pieces of the final 
+DOM representation will look using a block of _declarations_. The component
+compiles the DOM snippets in the declarations into a final DOM tree
+in its implementation. 
 
-Declarations can specify options, and contain sub-blocks which control
-how fragments of content are rendered. The overall component serves
-as a compiler, reorganizing the options and DOM fragments from the 
-declarations into a final rendering.
+Declarative components allow more comprehensive customization
+of complex components. By allowing the user to customize many
+different aspects of a component, the resulting component is
+easier to adapt and reuse.
 
-Declarative components allow the customization of different parts of an interface. They 
-can provide complex functionality in a more reusable manner than
-traditional block components.
+Examples of declarative components include 
+[ember-grid](https://github.com/shaunc/ember-grid)
+and [ember-smenu](https://github.com/shaunc/ember-smenu). The later
+uses `ember-declarative`; the former should soon.
 
-## An example
+## Example
 
 The example application defines a merge component, which allows its
 user to declare how to display items of separate sublists, then displays them
@@ -61,6 +63,9 @@ This will result in final html rendered as (with "id" elements suppressed):
       <li style="color:red">zebra</li>
     </ul>
 
+[Actually, in the current example implementation each "li" is wrapped
+in a div. We may clean this up a some point.]
+
 To accomplish this, the block of declarations are rendered
 using `display:none`. Then the merge list template defines
 an "implementation" section, which renders the overall list, and
@@ -70,6 +75,52 @@ moves the DOM nodes from the declaration to the list.
 
 This example should be extended to incorporate update of lists.
 
+## How it works
+
+The `merge-list` component has a template:
+
+		{{! merge-lists }}
+		
+		{{#declaration-block}}{{yield}}{{/declaration-block}}
+		
+		<ul>
+		  {{#each merged as |item|}}
+		    {{merge-lists/render-item item=item portalIndex=item.index}}
+		  {{/each}}
+		</ul>
+
+The declarations (`merge-item` blocks in this case) render the individual
+lists, and attach themselves to the `merge-list` data-structure. `merge-list`
+itself creates a merged list of items which it passes through 
+`merge-lists/render-item`. This component finds the `merge-item`, asks
+for its content, and inserts it underneath its own element.
+
+To accomplish this without too much boiler-plate, 
+`merge-item` and `render-item` mix in `PortalDeclaration` and `PortalRender` 
+(respectively), and `merge-list` mixes in `DeclarationContainer`. 
+
+In more detail, `PortalDeclaration`:
+
+1) Upon receiving attributes, it finds enclosing `DeclarationContainer`, 
+and registers itself, also setting its "declarationContainer" property.
+
+2) It sets up an observer of a property on `declarationContainer`
+to watch for updates on. Since we are not wiring via public attributes
+(so users don't have to patch together our data-flow for us when
+they declare `merge-item`s), glimmer will not know to rerender
+us otherwise.
+
+3) It attaches itself to a property of `declarationContainer`
+(specified by `portalContainer`).
+
+When `merge-lists/render-item` renders, `PortalRender` finds
+the property on declarationContainer (stored in `item.source`):
+as the implementation block is specified in the `merge-lists`
+template, we can explicitly pass the data here. It asks
+`merge-item` for its content via `PortalDeclaration.portElements()`
+and copies the appropriate child node (guided by `portalIndex`)
+into its own node.
+
 ## API
 
 Declarative components are a very flexible design pattern. Currently, these utilities
@@ -78,50 +129,73 @@ components. As declarative components become more common (whether or not they
 use these utilities), we hope to learn what aspects of their design are generalizable,
 and add support here.
 
-### DeclarationBlock
+### `DeclarationBlock`
 
-Declaration block is a container for declarations. At a minimum, declarative
-component authors can use it to hide declarations, as it will render with `display:none`. The
-main template of a declarative component can look like:
+Declaration block is a container for declarations. Currently, it simply wraps declarations
+in `display:none`: handling registrations is done by the overall component. 
 
-    {{#delcaration-block}}{{yield}}{{/declaration-block}}
+### `DeclarationContainer`
 
-    {{! implementation goes here }}
+Keeps a list of declarations, and provides `registerDeclaration(declaration)` for
+declarations to register themselves.
 
-`DeclarationBlock` takes `declarations` and `register` as attributes; the former
-is an array of declarations collected; the latter is a listener to collect declarations.
-Declarations are configured by default to register with `declarationBlock`, by calling
-the `registerDeclaration(decl)` in their `didInsertElement` hook to collect declarations.
+### `DeclarationBase`
 
-### DeclarationBase
+`DeclarationBase` is base mixin of `DeclarationPortal`. It handles the registration
+process. By default it looks up through the `parentView` chain for the first component that
+implements `DeclarationContainer`. A concrete implementation can specify
+`declarationContainerClass` or `declarationContainerMixin` to override this. 
 
-Mix in `DeclarationBase` to define a declaration. It will override
-`didInsertElement` to look up a declarative wrapper in the parent views above
-itself, set its `declarationContainer` attribute to the parent, and register
-itself using  `registerDeclaration` (passing itself as an argument). By
-default, `DeclarationBase` finds the first enclosing `parentView` which
-is an instance of `DeclarationBlock`. Declarative component authors may
-choose to receive notification directly, by setting `declarationContainerClass`
-on their declarations to be the class of the enclosing element to receive
-notifications.
+* `didRegisterDeclaration()`
 
-For example, in the dummy application, `MergeItem` mixes in `DeclarationBase` and
-sets `declarationContainerClass` to `MergeLists`, which in turn declares `registerDeclaration`
-to collect which list, and a source for the items.
+Callback called after registeration.
 
-See the sample application in `tests/dummy` for the details.
+* `updateDeclaration`
 
-### Best Practices
+Call to explicitly update component. An implementation is provided by `DeclarationPortal`
 
-As `registerDeclaration` is called within the render cycle, setting properties
-of ember objects can cause problems. One alternative is to use POJOs for
-internal datastructures. Although ember doesn't guarantee it, we have found
-that ember renders the tree in depth-first order, so declarations will be
-processed before the implementation section, making this a possible strategy.
+### `PortalDeclaration`
 
-The other alternative is to wrap changes in ember properties in
-`Ember.run.scheduleOnce('afterRender', ... )`. Depending on the details
-of your bindings you may or may not need to explicitly `rerender()`.
+Has a number of properties to configure:
+
+* `portalContainer`
+
+Data-structure to attach self to.
+
+* `portalAttribute`
+
+Attribute to use in `portalContainer`.
+
+* `portalElementClass` (optional)
+
+css class name to filter own content with. (Useful when iterating over a block
+of content so that `PortalRender` can avoid text nodes and pick out the right content.
+
+* `watchAttribute`: attribute of `declarationContainer` to watch to trigger update.
+
+* `notifyAttribute`: update will be accomplished by calling `notifyPropertyChange`
+on this attribute of self.
+
+#### Isn't that a lot of wires?
+
+`PortalDeclaration` could use a little "convention over configuration" magic. We
+hope to simplify these options when we know what the best conventions are.
+
+### `PortalRender`
+
+* `portal`
+
+Property containing the `PortalDeclaration` instance from which we want
+to get content.
+
+* `portalIndex`
+
+Which of the nodes from `PortalDeclaration` to insert. (Default 0).
+
+* `copyChildren`
+
+If true (default), DOM nodes are copied rather than moved. If you set
+to false, you have to be careful on updates.
 
 ### Utilities
 
@@ -129,18 +203,18 @@ of your bindings you may or may not need to explicitly `rerender()`.
 intention is that the components in the implementation render a shell for their
 elements, then copy or move nodes from declarations.
 
-#### moveChildren(source, target, replace)
+#### `moveChildren(source, target, replace)`
 
 Move children from `source` DOM node to `target` DOM node. If either is
 undefined, does nothing. If `replace` is true, then current children of `target`
 are removed before new children from `source` are added. Otherwise, new children
 are appended to any currently in `target`.
 
-#### removeChildren(source)
+#### `removeChildren(source)`
 
 Remove all children from DOM node `source`.
 
-#### copyChildren(source, target, replace)
+#### `copyChildren(source, target, replace)`
 
 Copy children from `source` DOM node to `target`. If either is undefined, does
 nothing. Semantics for `replace` are the same as for `moveChildren`.

@@ -29,7 +29,6 @@ export default Ember.Mixin.create(DeclarationBase, {
    */
   portalElementClass: null,
   /**
-   * Attribute of `declarationContainer` to watch for updates.
    *
    * Since `declarationContainer` is set dynamically by `DeclarationBase`,
    * it seems that observer on `portalContainer` is not sufficient to
@@ -86,6 +85,9 @@ export default Ember.Mixin.create(DeclarationBase, {
     let elt = this.element;
     if (elt == null) { return; }
     let subClass = this.get('portalElementClass');
+    if (subClass == null) {
+      return elt.childNodes;
+    }
     let subElements = elt.getElementsByClassName(subClass);
     return subElements;
   }

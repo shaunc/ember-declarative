@@ -13,10 +13,7 @@ export default Ember.Mixin.create({
   registerDeclaration(declaration) {
     let declarations = this.get('declarations');
     declarations.push(declaration);
-    let register = this.get('register');
-    if (register != null) {
-      register(declaration, declarations);
-    }
+    this.sendAction('register', declaration, declarations);
   },
 
   declarationsDidRegister() {
