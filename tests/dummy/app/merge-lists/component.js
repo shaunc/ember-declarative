@@ -4,16 +4,14 @@ import Ember from 'ember';
 import DeclarationContainer from 'ember-declarative/ed-container/mixin';
 
 export default Ember.Component.extend(DeclarationContainer, {
-  data: null,
-  subLists: Ember.computed(function(){ return Ember.A(); }),
 
-  merged: Ember.computed('data', 'subLists.[]', function() {
-    let {data, subLists} = this.getProperties('data', 'subLists');
+  merged: Ember.computed('declarations.@each.data.[]', function() {
+    const declarations = this.get('declarations');
     let merged = [];
-    for (let i = 0; i < subLists.length; i++) {
-      let {list, source} = subLists[i];
-      merged = merged.concat(data[list].map(function(item, index){
-        return {list, item, index, source};
+    for(let i = 0; i < declarations.length; i++) {
+      const mlist = declarations[i];
+      merged = merged.concat(mlist.get('data').map((item, index)=>{
+        return {list: i, index, item};
       }));
     }
     merged.sort(function(a, b) {
@@ -22,14 +20,6 @@ export default Ember.Component.extend(DeclarationContainer, {
       return 0;
     });
     return merged;
-  }),
-
-  registerDeclaration(itemDecl) {
-    Ember.run.scheduleOnce('afterRender', ()=>{
-      this.get('subLists').pushObject({
-        list: itemDecl.list, source: itemDecl});
-    });
-  }
-
+  })
 
 });

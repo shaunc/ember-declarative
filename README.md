@@ -81,19 +81,21 @@ The `merge-list` component has a template:
 
 		{{! merge-lists }}
 		
-		{{#declaration-block}}{{yield}}{{/declaration-block}}
+		{{#decl/ed-block}}{{yield}}{{/decl/ed-block}}
 		
 		<ul>
 		  {{#each merged as |item|}}
-		    {{merge-lists/render-item item=item portalIndex=item.index}}
+        {{impl/ed-render declarations item.list item.index}}
 		  {{/each}}
 		</ul>
 
 The declarations (`merge-item` blocks in this case) render the individual
 lists, and attach themselves to the `merge-list` data-structure. `merge-list`
-itself creates a merged list of items which it passes through 
-`merge-lists/render-item`. This component finds the `merge-item`, asks
-for its content, and inserts it underneath its own element.
+itself creates a merged list of items, creating wrappers which it iterates
+over in its block. In the block, the `ed-render` helper looks up the content
+and renders it.
+
+----
 
 To accomplish this without too much boiler-plate, 
 `merge-item` and `render-item` mix in `PortalDeclaration` and `PortalRender` 

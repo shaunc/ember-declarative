@@ -1,15 +1,56 @@
-{{! ember-declarative dummy applicationy}}
+{{! ember-declarative dummy application}}
 
-<h1>Merge Lists</h1>
+<h1>Ember Declarative Demo: Merge Lists</h1>
 
-{{#merge-lists data=data}}
+<table id="demo">
+  <tr>
+    <td class="females">
+      <ul>
+        {{#each females as |name|}}<li style="color:green">{{name}}</li>{{/each}}
+      </ul>
+    </td>
+    <td rowspan="2">
+      {{#merge-lists}}
 
-  {{#merge-item list='vegetable' as |item|}}
-    <li style="color:green">{{item}}</li>
-  {{/merge-item}}
+        {{#merge-list data=females as |item|}}
+          <li style="color:green">{{item}}</li>
+        {{/merge-list}}
 
-  {{#merge-item list='animal' as |item|}}
-    <li style="color:red">{{item}}</li>
-  {{/merge-item}}
+        {{#merge-list data=males as |item|}}
+          <li style="color:red">{{item}}</li>
+        {{/merge-list}}
 
-{{/merge-lists}}
+      {{/merge-lists}}
+    </td>
+  </tr>
+  <tr>
+    <td class="males">
+      <ul>
+        {{#each males as |name|}}<li style="color:red">{{name}}</li>{{/each}}
+      </ul>
+    </td>
+  </tr>
+  <tr class='explanation'>
+    <td>
+      <h4>Take away</h4>
+      <p>The `merge-lists` component is an extremely simple demonstration
+      component based on the `ember-declarative` tools.</p>
+      <p>The content of the lists is rendered using the template to the
+      right. Notice that the user can specify two arbitrary template
+      blocks, whose content is moved to the correct place by `merge-lists`.
+      </p>
+    </td>
+    <td>
+      <pre>
+        \{{#merge-lists}}
+          \{{#merge-list data=females as |item|}}
+            &lt;li style="color:green">\{{item}}&lt;/li>
+          \{{/merge-list}}
+          \{{#merge-list data=males as |item|}}
+            &lt;li style="color:red">\{{item}}&lt;/li>
+          \{{/merge-list}}
+        \{{/merge-lists}}
+      </pre>
+    </td>
+  </tr>
+</table>

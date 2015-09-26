@@ -1,0 +1,13 @@
+body * {
+  font-family: 'calibri';
+}
+tr td {
+  width: 50%;
+  vertical-align: center;
+}
+tr.explanation td {
+  vertical-align: top;
+}
+pre {
+  font-family: monospace;
+}

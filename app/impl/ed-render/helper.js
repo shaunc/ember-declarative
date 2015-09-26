@@ -1,0 +1,1 @@
+export { default } from 'ember-declarative/impl/ed-render/helper';
