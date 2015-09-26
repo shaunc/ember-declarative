@@ -1,7 +1,7 @@
 // dummy/merge-item/component
 
 import Ember from 'ember';
-import PortalDeclaration from 'ember-declarative/portal-declaration/mixin';
+import PortalDeclaration from 'ember-declarative/decl/ed-portal/mixin';
 
 export default Ember.Component.extend(PortalDeclaration, {
   list: null,

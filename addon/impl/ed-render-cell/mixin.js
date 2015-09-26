@@ -1,4 +1,10 @@
-// ember-declarative/declaration-render-cell/mixin
+/**
+ * @module ember-declarative/impl/ed-render-cell/mixin
+ *
+ * Mixin for "DYO" components which copy source from declarations,
+ * but don't want to use the portal infrastructure.
+ *
+ */
 
 import Ember from 'ember';
 import { moveChildren, copyChildren } from 'ember-declarative/utils/dom-util';

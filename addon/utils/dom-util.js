@@ -1,6 +1,6 @@
 /**
  *
- * @module util/dom-util
+ * @module ember-declarative/utils/dom-util
  *
  * Utilities for DOM manipulation.
  *

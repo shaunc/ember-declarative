@@ -1,7 +1,12 @@
-// ember-declarative/portal-declaration/mixin
+/**
+ * @module ember-declarative/decl/ed-portal/mixin
+ *
+ * Mixin for declarations which render content.
+ *
+ */
 
 import Ember from 'ember';
-import DeclarationBase from '../declaration-base/mixin';
+import DeclarationBase from '../ed-base/mixin';
 
 export default Ember.Mixin.create(DeclarationBase, {
   /**

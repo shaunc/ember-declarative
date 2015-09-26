@@ -1,4 +1,10 @@
-// ember-declarative/declaration-container/mixin
+/** 
+ * @module ember-declarative/ed-container/mixin 
+ *
+ * mixin for main declaration container class, whose template
+ * yields for declarations and then renders implementation.
+ *
+ */
 
 import Ember from 'ember';
 

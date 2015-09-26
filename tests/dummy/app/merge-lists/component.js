@@ -1,7 +1,7 @@
 // dummy/merge-lists/component
 
 import Ember from 'ember';
-import DeclarationContainer from 'ember-declarative/declaration-container/mixin';
+import DeclarationContainer from 'ember-declarative/ed-container/mixin';
 
 export default Ember.Component.extend(DeclarationContainer, {
   data: null,

@@ -1,4 +1,8 @@
-// ember-declarative/portal-render/mixin
+/**
+ * @module ember-declarative/impl/ed-portal/mixin
+ *
+ * Mixin for component to port content from declaration.
+ */
 
 import Ember from 'ember';
 import { moveChildren, copyChildren } from 'ember-declarative/utils/dom-util';
