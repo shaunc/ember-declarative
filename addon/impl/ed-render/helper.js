@@ -13,6 +13,8 @@
  * * itemSubIndex -- to pass to portal interface to get rendered content
  *   Optional; default 0. pass as `null` to get all elements.
  *
+ * Keyword argument: `defaultValue` -- default if content not present.
+ *
  * Cooperates with `ember-declarative/decl/ed-portal` to maintain
  * correspondence between content as declared and content implementation.
  */
@@ -34,8 +36,7 @@ export default Ember.Helper.extend({
     this.content = null;
   },
 
-  compute(params) {
-    let [declarations, name, itemIndex, newPortalIndex] = params;
+  compute([declarations, name, itemIndex, newPortalIndex], {defaultValue}) {
     if (typeof name === 'number') {
       newPortalIndex = itemIndex;
       itemIndex = name;
@@ -46,16 +47,14 @@ export default Ember.Helper.extend({
     let oldPortal = this.portal;
     let oldPortalIndex = this.portalIndex;
     if(newPortal === oldPortal && newPortalIndex === oldPortalIndex) {
-      console.log("replaced content?", Ember.guidFor(this), _E(this.content));
-      return this.content;
+      return this.content || defaultValue;
     }
     if(oldPortal !== null) {
       const {content} = this.swapContent({rerender: false});
       oldPortal.putBackContent(content, oldPortalIndex);
     }
     const content = this._receiveContent(newPortal, newPortalIndex);
-    //console.log("new content", Ember.guidFor(this), _E(this.content));
-    return content;
+    return content || defaultValue;
   },
   /* jshint ignore:start */  /* waiting for destructuring defaults
      https://github.com/jshint/jshint/issues/2117
@@ -111,6 +110,10 @@ export default Ember.Helper.extend({
     let content;
     this.portal = portal;
     this.portalIndex = portalIndex;
+    if (portal == null) {
+      this.content = undefined;
+      return; 
+    }
     if (portalIndex === null) {
       content = portal.portElements(this);
     }
