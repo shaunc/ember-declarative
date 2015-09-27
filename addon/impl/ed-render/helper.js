@@ -13,62 +13,108 @@
  * * itemSubIndex -- to pass to portal interface to get rendered content
  *   Optional; default 0. pass as `null` to get all elements.
  *
- * **TODO** content is "teleported" from the hidden declarations
- * section. In the future, the IDs of teleported content should be
- * modified, and the content copied, rather than moved.
- *
+ * Cooperates with `ember-declarative/decl/ed-portal` to maintain
+ * correspondence between content as declared and content implementation.
  */
 
 import Ember from 'ember';
 
+function _E(content) {
+  const text = (content || {}).innerText;
+  return ('' + text).trim();
+}
+
 
 export default Ember.Helper.extend({
 
-  portal: null,
+  init() {
+    this._super();
+    this.portal = null;
+    this.portalIndex = null;
+    this.content = null;
+  },
 
   compute(params, hash) {
-    let [declarations, name, itemIndex, itemSubIndex] = params;
-    if (typeof name == 'number') {
-      itemSubIndex = itemIndex;
+    let [declarations, name, itemIndex, newPortalIndex] = params;
+    if (typeof name === 'number') {
+      newPortalIndex = itemIndex;
       itemIndex = name;
       name = null;
     }
-    let portal = this.get('portal');
-    let declIndex = 0;
-    let content = null;
-    declarations.some((decl)=>{
-      if (name != null) {
+    const portals = this._getPortals(declarations, name);
+    let newPortal = portals[itemIndex];
+    let oldPortal = this.portal;
+    let oldPortalIndex = this.portalIndex;
+    if(newPortal === oldPortal && newPortalIndex === oldPortalIndex) {
+      console.log("replaced content?", Ember.guidFor(this), _E(this.content));
+      return this.content;
+    }
+    if(oldPortal !== null) {
+      const {content} = this.swapContent({rerender: false});
+      oldPortal.putBackContent(content, oldPortalIndex);
+    }
+    const content = this._receiveContent(newPortal, newPortalIndex);
+    //console.log("new content", Ember.guidFor(this), _E(this.content));
+    return content;
+  },
+  swapContent({
+      rerender = true, newContent = null, newPortal = null, 
+      newPortalIndex = null} = {}) {
+    const content = this.content;
+    const portal = this.portal;
+    const portalIndex = this.portalIndex
+    this.content = newContent;
+    this.portal = newPortal;
+    this.portalIndex = newPortalIndex;
+    if(rerender) {
+      Ember.run.scheduleOnce('afterRender',this, 'recompute');
+    }
+    return {content, portal, portalIndex};
+  },
+  forgetContent({rerender = true} = {}) {
+    this.content = null;
+    this.portal = null;
+    this.portalIndex = null;
+    if(rerender) {
+      Ember.run.scheduleOnce('afterRender',this, 'recompute');
+    }
+  },
+  willDestroyElement() {
+    this.putBackContent();
+  },
+  _getPortals(declarations, name) {
+    if (name != null) {
+      const memo = declarations._memoFilters = declarations._memoFilters || {};
+      let nameFilter = memo[name];
+      if(nameFilter != null) {
+        return nameFilter;
+      }
+      nameFilter = declarations.filter((decl)=>{
         const declName = decl.constructor.toString().split(':')[1];
         const classNames = decl.classNames || [];
         if (name !== declName && classNames.indexOf(name) === -1) {
           return false;
         }
-      }
-      if (itemIndex !== declIndex++) { return false; }
-      if (portal != decl) {
-        if (portal != null) {
-          portal.off('didRender', this, 'recompute');
-        }
-        Ember.run.scheduleOnce('afterRender', ()=>{
-          this.set('portal', decl);
-          decl.on('didRender', this, 'recompute');
-        });
-      }
-      if (itemSubIndex === null) {
-        content = decl.portElements();
         return true;
-      }
-      else { 
-        content = decl.portElement(itemSubIndex || 0);
-        return true;
-      }
-    });
-    return content;
-  },
-  willDestroyElement() {
-    const portal = this.get('portal');
-    if (portal != null) {
-      portal.off('didRender', this, 'recompute');
+      });
+      memo[name] = nameFilter;
+      return nameFilter;
+    } else {
+      return declarations;
     }
+  },
+  _receiveContent(portal, portalIndex) {
+    let content;
+    this.portal = portal;
+    this.portalIndex = portalIndex;
+    if (portalIndex === null) {
+      debugger
+      content = portal.portElements(this);
+    }
+    else { 
+      content = portal.portElement(this, portalIndex || 0);
+    }
+    this.content = content;
+    return content;
   }
 });

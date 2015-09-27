@@ -1,11 +1,22 @@
 body * {
   font-family: 'calibri';
 }
-tr td {
+#demo tr:first-of-type td {
   width: 50%;
-  vertical-align: center;
+  vertical-align: top;
 }
-tr.explanation td {
+#demo tr:last-of-type td {
+  width: 50%;
+  vertical-align: bottom;
+}
+
+#demo {
+  height: 400px;
+  width:100%;
+  vertical-align: middle;
+}
+#explanation td {
+  border-top: 1px solid #ddd;
   vertical-align: top;
 }
 pre {
