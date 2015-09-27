@@ -64,6 +64,7 @@ export default Ember.Mixin.create(DeclarationBase, {
   init() {
     this._super();
     this.subElements = [];
+    this.newElements = null;
     this.receivedWhole = null;
   },
   didRender() {
@@ -72,11 +73,15 @@ export default Ember.Mixin.create(DeclarationBase, {
   },
  
   _getElements() {
+    if(this.newElements != null) {
+      return this.newElements;
+    }
     let elt = this.element;
     if (elt == null) { return; }
     let subClass = this.get('portalElementClass');
     let subElements = ((subClass == null) ? elt.childNodes 
       : elt.getElementsByClassName(subClass)) || [];
+    this.newElements = subElements;
     return subElements;
   },
   portElements(receiver) {
@@ -155,6 +160,7 @@ export default Ember.Mixin.create(DeclarationBase, {
     }
     */
     this.subElements = newElements;
+    this.newElements = null;
   },
   _sendToRender(destination, element, idx) {
     if(element.isPlaceholder) {
