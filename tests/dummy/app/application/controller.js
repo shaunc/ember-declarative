@@ -1,8 +1,8 @@
-/* GLOBALS chance Chance */
+/* globals Chance */
 // dummy/application/controller
 
 import Ember from 'ember';
-chance = new Chance(345);
+const chance = new Chance(345);
 
 function getName(gender) {
   return chance.first({gender});
@@ -34,7 +34,7 @@ export default Ember.Controller.extend({
     const maxAction = (list.length <= 1) ? 1 : 2;
     const action = chance.integer({min: minAction, max: maxAction});
     const newName = getName(gender);
-    if(action == 0) {
+    if(action === 0) {
       const index = chance.integer({min: 0, max: list.length});
       if (index < list.length) {
         list.insertAt(index, newName);
@@ -43,7 +43,7 @@ export default Ember.Controller.extend({
         list.pushObject(newName);
       }
     }
-    else if (action == 1) {
+    else if (action === 1) {
       const index = chance.integer({min: 0, max: list.length - 1});
       list.replace(index, 1, newName);
     }

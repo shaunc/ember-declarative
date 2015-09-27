@@ -8,23 +8,20 @@ moduleForComponent('/dummy/merge-lists', 'Integration | Component | dummy/merge 
 test('it renders', function(assert) {
   assert.expect(1);
 
-  let data = {
-    vegetable: ['apple', 'lettuce', 'pear'],
-    animal: ['bear', 'goat', 'zebra']
-  };
-  this.set('data', data);
+  this.set('vegetable', ['apple', 'lettuce', 'pear']);
+  this.set('animal', ['bear', 'goat', 'zebra']);
 
   // Template block usage:
   this.render(hbs`
-    {{#merge-lists data=data }}
+    {{#merge-lists}}
 
-      {{#merge-item list='vegetable' as |item|}}
+      {{#merge-list data=vegetable as |item|}}
         <li style="color:green">{{item}}</li>
-      {{/merge-item}}
+      {{/merge-list}}
 
-      {{#merge-item list='animal' as |item|}}
+      {{#merge-list data=animal as |item|}}
         <li style="color:red">{{item}}</li>
-      {{/merge-item}}
+      {{/merge-list}}
 
     {{/merge-lists}}    
   `);

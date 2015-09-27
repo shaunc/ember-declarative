@@ -34,7 +34,7 @@ export default Ember.Helper.extend({
     this.content = null;
   },
 
-  compute(params, hash) {
+  compute(params) {
     let [declarations, name, itemIndex, newPortalIndex] = params;
     if (typeof name === 'number') {
       newPortalIndex = itemIndex;
@@ -57,12 +57,15 @@ export default Ember.Helper.extend({
     //console.log("new content", Ember.guidFor(this), _E(this.content));
     return content;
   },
+  /* jshint ignore:start */  /* waiting for destructuring defaults
+     https://github.com/jshint/jshint/issues/2117
+     to be released...*/
   swapContent({
       rerender = true, newContent = null, newPortal = null, 
       newPortalIndex = null} = {}) {
     const content = this.content;
     const portal = this.portal;
-    const portalIndex = this.portalIndex
+    const portalIndex = this.portalIndex;
     this.content = newContent;
     this.portal = newPortal;
     this.portalIndex = newPortalIndex;
@@ -79,6 +82,7 @@ export default Ember.Helper.extend({
       Ember.run.scheduleOnce('afterRender',this, 'recompute');
     }
   },
+  /* jshint ignore:end */
   willDestroyElement() {
     this.putBackContent();
   },
@@ -108,7 +112,6 @@ export default Ember.Helper.extend({
     this.portal = portal;
     this.portalIndex = portalIndex;
     if (portalIndex === null) {
-      debugger
       content = portal.portElements(this);
     }
     else { 

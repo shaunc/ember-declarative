@@ -100,7 +100,6 @@ export default Ember.Mixin.create(DeclarationBase, {
     if(this.receivedWhole != null) {
       throw new Error("Previously ported whole; cannot now port parts.");
     }
-    const prevElement = this.subElements[idx];
     const prevReceiver = (this.subElements[idx] || {}).receiver;
     if(prevReceiver === receiver) { return; }
     if(prevReceiver != null) {
@@ -186,7 +185,7 @@ export default Ember.Mixin.create(DeclarationBase, {
   },
   _takeDOM(content, receiver) {
     for(let i = 0; i < content.lengh; i++) {
-      this._takeDOMIdx(content[i], i);
+      this._takeDOMIdx(content[i], receiver, i);
     }
   },
   _takeDOMIdx(contentElt, receiver, idx) {
@@ -210,7 +209,7 @@ export default Ember.Mixin.create(DeclarationBase, {
   },
   _putBackDOMIdx(contentElt, idx) {
     const placeholder = this.subElements[idx];
-    placeholder.receiver = null
+    placeholder.receiver = null;
     placeholder.returnedContent = contentElt;
   }
 });
