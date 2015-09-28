@@ -34,12 +34,6 @@
 
 import Ember from 'ember';
 
-function _E(content) {
-  const text = (content || {}).innerText;
-  return ('' + text).trim();
-}
-
-
 export default Ember.Helper.extend({
 
   init() {
@@ -58,10 +52,10 @@ export default Ember.Helper.extend({
         name = null;
       }
       const portals = this._getPortals(declarations, name);
-      Portal = portals[itemIndex];
+      portal = portals[itemIndex];
     }
     else {
-      newPortalIndex = declarations
+      newPortalIndex = declarations;
     }
     let oldPortal = this.portal;
     let oldPortalIndex = this.portalIndex;
@@ -142,7 +136,6 @@ export default Ember.Helper.extend({
       return; 
     }
     if (portalIndex === null) {
-      debugger 
       const elements = portal.portElements(this);
       content = document.createElement('DIV');
       Array.apply(null, elements).forEach((node)=>content.appendChild(node));
