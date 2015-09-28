@@ -1,0 +1,6 @@
+{{! ember-declarative/impl/ed-portal ~}}
+{{#if portal ~}}
+  {{impl/ed-render portalIndex portal=portal defaultValue=defaultValue}}
+{{else ~}}
+  {{#if hasBlock}}{{yield}}{{else}}{{defaultValue}}{{/if ~}}
+{{/if}}
