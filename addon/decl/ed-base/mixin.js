@@ -30,31 +30,17 @@ export default Ember.Mixin.create({
    */
   declarationContainer: null,
 
-  didReceiveAttrs() {
+  _declAttrsChanged: Ember.on('didReceiveAttrs', function() {
+    this.registerDeclarationWithContainer();
+  }),
+  registerDeclarationWithContainer() {
     this._super();
     let declarationContainer = this.findDeclarationContainer();
     if (declarationContainer != null) {
       this.set('declarationContainer', declarationContainer);
       declarationContainer.registerDeclaration(this);
-      this.didRegisterDeclaration();
+      this.trigger('didRegisterDeclaration', declarationContainer);
     }
-  },
-  /**
-   * Override to act on container registration.
-   */
-  didRegisterDeclaration() {
-    // 
-  },
-  /**
-   * Call to trigger explicit update.
-   *
-   * Override to give behavior. (`PortalDeclaration` gives
-   * an implementation.)
-   */
-  updateDeclaration() {
-    // 
-    //
-    // 
   },
   findDeclarationContainer() {
     let containerClass = this.get('declarationContainerClass');

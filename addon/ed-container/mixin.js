@@ -10,23 +10,13 @@ import Ember from 'ember';
 
 export default Ember.Mixin.create({
 
-  declarationsRegistered: false,
-  declarationsUpdatedOnce: 0,
   declarations: Ember.computed({
     get(){ return Ember.A(); }, set(k, v){ return v; }}),
   register: null,
   
   registerDeclaration(declaration) {
     let declarations = this.get('declarations');
-    declarations.push(declaration);
-    this.sendAction('register', declaration, declarations);
+    declarations.pushObject(declaration);
   },
-
-  declarationsDidRegister() {
-    this.set('declarationsRegistered', true);
-  },
-  declaractionsDidRerender() {
-    this.incrementProperty('declarationsUpdated');
-  }
 
 });

@@ -32,25 +32,7 @@
 
 import Ember from 'ember';
 import DeclarationBase from '../ed-base/mixin';
-/*
-function _E(content) {
-  const text = (content || {}).innerText;
-  return ('' + text).trim();
-}
-function _DE(elements) {
-  return Array.apply(null, elements).map(e=>{
-    if (e.isPlaceholder && e.returnedContent) {
-      return `R(${_E(e.returnedContent)})`;
-    }
-    else if(e.isPlaceholder && e.receiver) {
-      return `P(${_E(e.receiver.content)})`;
-    }
-    else {
-      return _E(e);
-    }
-  }).join(' ').trim();
-}
-*/
+
 export default Ember.Mixin.create(DeclarationBase, {
 
   /**
@@ -67,7 +49,10 @@ export default Ember.Mixin.create(DeclarationBase, {
     this.newElements = null;
     this.receivedWhole = null;
   },
-  didRender() {
+  _portalRendered: Ember.on('didRender', function(){
+    this.processPortalElements();
+  }),
+  processPortalElements() {
     const newElements = this._getElements();
     this._updateElements(newElements);
   },
@@ -107,6 +92,10 @@ export default Ember.Mixin.create(DeclarationBase, {
       this.putBackContent(prevContent, idx);
     }
     const newContent = this._getElements()[idx];
+    if(newContent == null) {
+      // XXX TODO: here perhaps create placeholder "waiting for index?"
+      return null;
+    }
     if(newContent.returnedContent != null) {
       return newContent.returnedContent;      
     }

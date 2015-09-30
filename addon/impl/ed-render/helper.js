@@ -66,7 +66,7 @@ export default Ember.Helper.extend({
       const {content} = this.swapContent({rerender: false});
       oldPortal.putBackContent(content, oldPortalIndex);
     }
-    const content = this._receiveContent(portal, newPortalIndex);
+     const content = this._receiveContent(portal, newPortalIndex);
     return content || Ember.String.htmlSafe(defaultValue);
   },
   /* jshint ignore:start */  /* waiting for destructuring defaults
