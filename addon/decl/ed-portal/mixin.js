@@ -125,6 +125,10 @@ export default Ember.Mixin.create(DeclarationBase, {
     let idx;
     for(idx = 0; idx < oldElements.length; idx++) {
       const oldElement = oldElements[idx];
+      if(oldElement == null) {
+        // can be that some elements had no content
+        continue;
+      }
       const destination = oldElement.receiver;
       if (idx >= newElements.length) {
         if(destination != null) {
