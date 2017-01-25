@@ -82,7 +82,7 @@ export default Ember.Helper.extend({
       content = content.childNodes;
     }
     if (newContent != null && newPortalIndex == null) {
-      const wrapper = dom.createElement('DIV');
+      const wrapper = document.createElement('DIV');
       Array.apply(null, newContent).forEach((node)=>wrapper.appendChild(node));
       newContent = wrapper;
     }

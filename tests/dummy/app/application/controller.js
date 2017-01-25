@@ -1,7 +1,10 @@
-/* globals Chance */
 // dummy/application/controller
 
 import Ember from 'ember';
+
+
+import Chance from 'npm:chance';
+
 const chance = new Chance(345);
 
 function getName(gender) {

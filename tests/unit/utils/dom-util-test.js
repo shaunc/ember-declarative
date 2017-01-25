@@ -1,8 +1,10 @@
+import Ember from 'ember';
 import { 
   moveChildren, removeChildren, copyChildren 
   } from 'ember-declarative/utils/dom-util';
 import { module } from 'qunit';
 import { test } from 'ember-qunit';
+const $ = Ember.$;
 
 module('Unit | Utility | dom util', {
   beforeEach() {
