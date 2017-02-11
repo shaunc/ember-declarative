@@ -1,6 +1,6 @@
 {
   "name": "ember-declarative",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Base addon for creating declarative components.",
   "keywords": [
     "ember-addon"
