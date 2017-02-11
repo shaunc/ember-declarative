@@ -2,6 +2,8 @@
 
 Tools for declarative component creation.
 
+[![npm version](https://badge.fury.io/js/ember-declarative.svg)](https://badge.fury.io/js/ember-declarative)
+
 ## Installation
 
 *  `ember install ember-declarative`
