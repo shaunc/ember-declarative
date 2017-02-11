@@ -10,15 +10,15 @@
       </ul>
     </td>
     <td rowspan="2">
-      {{#merge-lists}}
+      {{#merge-lists as |decl|}}
 
-        {{#merge-list data=females as |item|}}
+        {{#decl.list data=females as |item|}}
           <li style="color:green">{{item}}</li>
-        {{/merge-list}}
+        {{/decl.list}}
 
-        {{#merge-list data=males as |item|}}
+        {{#decl.list data=males as |item|}}
           <li style="color:red">{{item}}</li>
-        {{/merge-list}}
+        {{/decl.list}}
 
       {{/merge-lists}}
     </td>
@@ -44,13 +44,13 @@
     </td>
     <td>
       <pre>
-        \{{#merge-lists}}
-          \{{#merge-list data=females as |item|}}
+        \{{#merge-lists as |decl|}}
+          \{{#decl.list data=females as |item|}}
             &lt;li style="color:green">\{{item}}&lt;/li>
-          \{{/merge-list}}
-          \{{#merge-list data=males as |item|}}
+          \{{/decl.list}}
+          \{{#decl.list data=males as |item|}}
             &lt;li style="color:red">\{{item}}&lt;/li>
-          \{{/merge-list}}
+          \{{/decl.list}}
         \{{/merge-lists}}
       </pre>
     </td>

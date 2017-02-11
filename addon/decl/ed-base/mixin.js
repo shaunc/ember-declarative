@@ -11,18 +11,22 @@ import DeclarationContainer from '../../ed-container/mixin';
 
 export default Ember.Mixin.create({
   /**
+   * Mixin which the instance in `parentView` chain with which we
+   * should register ourselves should support.
+   *
+   * Default `DeclarationContainer` means we will register ourselves
+   * with the first component above us which mixes in `DeclarationContainer`.
+   * Except in cases where two declarative components are intertwined, 
+   * this default should usually be sufficient.
+   */
+  declarationContainerMixin: DeclarationContainer,
+  /**
    * Class in `parentView` chain with which to register ourselves.
    * 
    * Alternative to `declarationContainerMixin`, which takes precedence
    * if set.
    */
   declarationContainerClass: null,
-  /**
-   * Mixin which the instance in `parentView` chain with which we
-   * should register ourselves should support.
-   *
-   */
-  declarationContainerMixin: DeclarationContainer,
   /**
    * Instance in `parentView` chain with which we are registered.
    *

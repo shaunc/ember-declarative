@@ -1,6 +1,8 @@
 {{! merge-lists }}
 
-{{#decl/ed-block}}{{yield}}{{/decl/ed-block}}
+{{#decl/ed-block}}
+  {{yield (hash list=(component "merge-list"))}}
+{{/decl/ed-block}}
 
 <ul>
   {{#each merged as |item|}}

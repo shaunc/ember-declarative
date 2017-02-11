@@ -1,9 +1,9 @@
 // dummy/merge-lists/component
 
 import Ember from 'ember';
-import DeclarationContainer from 'ember-declarative/ed-container/mixin';
+import EDContainerMixin from 'ember-declarative/ed-container/mixin';
 
-export default Ember.Component.extend(DeclarationContainer, {
+export default Ember.Component.extend(EDContainerMixin, {
 
   merged: Ember.computed('declarations.@each.dataChanged', function() {
     const declarations = this.get('declarations');

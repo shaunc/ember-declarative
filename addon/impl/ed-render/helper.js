@@ -69,9 +69,6 @@ export default Ember.Helper.extend({
      const content = this._receiveContent(portal, newPortalIndex);
     return content || Ember.String.htmlSafe(defaultValue);
   },
-  /* jshint ignore:start */  /* waiting for destructuring defaults
-     https://github.com/jshint/jshint/issues/2117
-     to be released...*/
   swapContent({
       rerender = true, newContent = null, newPortal = null, 
       newPortalIndex = null} = {}) {
@@ -102,7 +99,6 @@ export default Ember.Helper.extend({
       Ember.run.scheduleOnce('afterRender',this, 'recompute');
     }
   },
-  /* jshint ignore:end */
   willDestroyElement() {
     this.putBackContent();
   },

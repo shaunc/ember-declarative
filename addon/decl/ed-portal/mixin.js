@@ -15,7 +15,7 @@
  * To setup a connection, a receiver should call `portElements` (to
  * receive all content), or `portElement` (to receive content at an
  * index). 
- *.
+ *
  * This updates the ported element list, calling `updateElements`, 
  * registers the receiver, and returns the content to it.
  *
